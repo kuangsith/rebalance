@@ -144,7 +144,7 @@ st.dataframe(df)
 
 ## Displaying key performance indicator
 
-dfperf = pd.dataframe([],columns= ['Investment','Profit','Sharpe ratio','Max Drawdown'])
+dfperf = pd.DataFrame([],columns= ['Investment','Profit','Sharpe ratio','Max Drawdown'])
 dfperf = dfperf.set_index('Investment')
 
 investment1 = ticker1
