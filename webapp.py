@@ -15,27 +15,30 @@ if 'acceptablerange' not in st.session_state:
 st.header('Rebalancing')
 
 
-col1, col2 = st.columns(2)
+with st.expander("Setting"):
+    col1, col2 = st.columns(2)
 
-coinlist = ['BTC','ETH','SOL','BNB','ADA']
+    coinlist = ['BTC','ETH','SOL','BNB','ADA']
 
-with col1:
-    ticker1_temp = st.selectbox('Asset #1',coinlist)
+    with col1:
+        ticker1_temp = st.selectbox('Asset #1',coinlist)
 
-with col2:
-    ticker2_temp = st.selectbox('Asset #2',coinlist)
+    with col2:
+        ticker2_temp = st.selectbox('Asset #2',coinlist)
 
-kol1, kol2, kol3 = st.columns(3)
+    kol1, kol2, kol3 = st.columns(3)
 
 
-with kol1:
-    ratio_temp = st.slider('Ratio of asset1 to total captal:',min_value=0.1,max_value=0.9,value=0.5)
+    with kol1:
+        ratio_temp = st.slider('Ratio of asset1 to total captal:',min_value=0.1,max_value=0.9,value=0.5)
 
-with kol2:
-    acceptable_temp = st.slider('Percentage off to rebalance:', min_value=0.00, max_value = 0.2,value=0.05)
+    with kol2:
+        acceptable_temp = st.slider('Percentage off to rebalance:', min_value=0.00, max_value = 0.2,value=0.05)
 
-with kol3:
-    update = st.button('Update')
+    with kol3:
+        update = st.button('Update')
+
+
 
 year = 2022
 month = 1
@@ -127,6 +130,10 @@ for i,row in df.iloc[1:].iterrows():
 df = df.dropna()
 
 
+
+## Displaying data
+
+st.write(f"Rebalacing with {int(ratio*100)}% on {ticker1} and {int((1-ratio)*100)}% on {ticker2}.")
 
 st.line_chart(data=df[[f'Capital - {ticker1}',f'Capital - {ticker2}','Total Cap']])
 
