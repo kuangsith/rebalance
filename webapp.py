@@ -152,7 +152,7 @@ sharpe3 = get_price_binanace.sharpe(df['Total Cap'])
 mdd3 = get_price_binanace.maxdrawdown(df['Total Cap'])
 dat3 = [investment3,profit3,sharpe3,mdd3]
 
-dfperf = dfperf.append(pd.Series([dat1,dat2,dat3], index=df.columns), ignore_index=True)
+dfperf = pd.DataFrame([dat1,dat2,dat3],columns= ['Investment','Profit','Sharpe ratio','Max Drawdown'])
 
 st.dataframe(dfperf)
 
