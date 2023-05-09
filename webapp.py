@@ -124,6 +124,8 @@ for i,row in df.iloc[1:].iterrows():
         df.loc[i,f'portion {ticker1} - reb'] = df.loc[i,f'portion {ticker1}']
         df.loc[i,f'portion {ticker2} - reb'] = df.loc[i,f'portion {ticker2}']
 
+df = df.dropna()
+
 st.dataframe(df)
 
 st.line_chart(data=df[[f'Capital - {ticker1}',f'Capital - {ticker2}','Total Cap']], x = df['datetime'])
