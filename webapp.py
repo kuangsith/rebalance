@@ -3,7 +3,17 @@ import datetime
 import get_price_binanace
 import streamlit as st
 
+if 'ticker1' not in st.session_state:
+    st.session_state.ticker1 = 'BTC'
+if 'ticker2' not in st.session_state:
+    st.session_state.ticker2 = 'ETH'
+if 'ratio' not in st.session_state:
+    st.session_state.ratio = 0.5
+if 'acceptablerange' not in st.session_state:
+    st.session_state.acceptablerange = 0.05
+
 st.header('Rebalancing')
+
 
 col1, col2 = st.columns(2)
 
@@ -15,19 +25,27 @@ with col1:
 with col2:
     asset2 = st.selectbox('Asset #2',coinlist)
 
+kol1, kol2, kol3 = st.columns(3)
 
-temp_ratio = st.slider('Ratio of asset1 to total captal:',min_value=0.1,max_value=0.9,value=0.5)
 
-temp_acceptable = st.slider('Percentage off to rebalance:', min_value=0.00, max_value = 0.2,value=0.05)
-    
+with kol1:
+    temp_ratio = st.slider('Ratio of asset1 to total captal:',min_value=0.1,max_value=0.9,value=0.5)
+
+with kol2:
+    temp_acceptable = st.slider('Percentage off to rebalance:', min_value=0.00, max_value = 0.2,value=0.05)
+
+with kol3:
+    update = st.button('Update')
 
 year = 2022
 month = 1
 day = 1
 
-ticker1 = 'BTC'
-
-ticker2 = 'ETH'
+#defining all parameters
+ticker1 = st.session_state.ticker1
+ticker2 = st.session_state.ticker2
+ratio = st.session_state.ratio
+acceptablerange = st.session_state.acceptablerange
 
 timestart = int(datetime.datetime(year,month,day,tzinfo=datetime.timezone.utc).timestamp())*1000
 
@@ -76,17 +94,15 @@ for i,row in df.iloc[1:].iterrows():
     yesterdayreturn = df.loc[i-1,f'return {ticker2}']
     df.loc[i,f'Capital - {ticker2}'] = yesterdaycap*(1+yesterdayreturn)
     
-ratio = 0.5
 fee = 0.0
-acceptablerange = 0.05 #This will rebalance if the ratio if off by >= aceptablerange
 
 df[f'portion {ticker1}'] = 0.0
 df.loc[0,f'portion {ticker1}'] = ratio*initcap
 df[f'portion {ticker2}'] = 0.0
 df.loc[0,f'portion {ticker2}'] = (1-ratio)*initcap
 
-df['Total Cap'] = 0.0
-df.loc[0,'Total Cap'] = initcap
+df['Total Cap - Rebalance'] = 0.0
+df.loc[0,'Total Cap - Rebalance'] = initcap
 df['Rebalance?'] = False
 
 df['ratio'] = ratio
@@ -97,15 +113,16 @@ df[f'portion {ticker2} - reb'] = df[f'portion {ticker2}']
 for i,row in df.iloc[1:].iterrows():
     df.loc[i,f'portion {ticker1}'] = df.loc[i-1,f'portion {ticker1} - reb']*(1+df.loc[i-1,f'return {ticker1}'])
     df.loc[i,f'portion {ticker2}'] = df.loc[i-1,f'portion {ticker2} - reb']*(1+df.loc[i-1,f'return {ticker2}'])
-    df.loc[i,'Total Cap'] = df.loc[i,f'portion {ticker1}'] + df.loc[i,f'portion {ticker2}']
-    df.loc[i,'ratio'] = df.loc[i,f'portion {ticker1}']/df.loc[i,'Total Cap']
+    df.loc[i,'Total Cap - Rebalance'] = df.loc[i,f'portion {ticker1}'] + df.loc[i,f'portion {ticker2}']
+    df.loc[i,'ratio'] = df.loc[i,f'portion {ticker1}']/df.loc[i,'Total Cap - Rebalance']
 
-    if abs(df.loc[i,f'portion {ticker1}']/df.loc[i,'Total Cap']-ratio) >= acceptablerange:
+    if abs(df.loc[i,f'portion {ticker1}']/df.loc[i,'Total Cap - Rebalance']-ratio) >= acceptablerange:
         df.loc[i,'Rebalance?'] = True
-        df.loc[i,f'portion {ticker1} - reb'] = ratio*df.loc[i,'Total Cap']
-        df.loc[i,f'portion {ticker2} - reb'] = df.loc[i,'Total Cap'] - df.loc[i,f'portion {ticker1} - reb']
+        df.loc[i,f'portion {ticker1} - reb'] = ratio*df.loc[i,'Total Cap - Rebalance']
+        df.loc[i,f'portion {ticker2} - reb'] = df.loc[i,'Total Cap - Rebalance'] - df.loc[i,f'portion {ticker1} - reb']
     else:
         df.loc[i,f'portion {ticker1} - reb'] = df.loc[i,f'portion {ticker1}']
         df.loc[i,f'portion {ticker2} - reb'] = df.loc[i,f'portion {ticker2}']
 
-st.line_chart(data=df[[f'Capital - {ticker1}',f'Capital - {ticker2}','Total Cap']])
+st.line_chart(data=df[[f'Capital - {ticker1}',f'Capital - {ticker2}','Total Cap - Rebalance']], x = df['datetime'])
+
