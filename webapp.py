@@ -20,19 +20,19 @@ col1, col2 = st.columns(2)
 coinlist = ['BTC','ETH','SOL','BNB','ADA']
 
 with col1:
-    asset1 = st.selectbox('Asset #1',coinlist)
+    ticker1_temp = st.selectbox('Asset #1',coinlist)
 
 with col2:
-    asset2 = st.selectbox('Asset #2',coinlist)
+    ticker2_temp = st.selectbox('Asset #2',coinlist)
 
 kol1, kol2, kol3 = st.columns(3)
 
 
 with kol1:
-    temp_ratio = st.slider('Ratio of asset1 to total captal:',min_value=0.1,max_value=0.9,value=0.5)
+    ratio_temp = st.slider('Ratio of asset1 to total captal:',min_value=0.1,max_value=0.9,value=0.5)
 
 with kol2:
-    temp_acceptable = st.slider('Percentage off to rebalance:', min_value=0.00, max_value = 0.2,value=0.05)
+    acceptable_temp = st.slider('Percentage off to rebalance:', min_value=0.00, max_value = 0.2,value=0.05)
 
 with kol3:
     update = st.button('Update')
@@ -126,6 +126,15 @@ for i,row in df.iloc[1:].iterrows():
 
 df = df.dropna()
 
-st.dataframe(df)
+
 
 st.line_chart(data=df[[f'Capital - {ticker1}',f'Capital - {ticker2}','Total Cap']])
+
+st.write('Full dataframe:')
+st.dataframe(df)
+
+if update:
+    st.session_state.ticker1 = ticker1_temp
+    st.session_state.ticker2 = ticker2_temp
+    st.session_state.ratio = ratio_temp
+    st.session_state.acceptablerange = acceptable_temp
