@@ -93,7 +93,7 @@ def sharpe(dat):
 def maxdrawdown(dat):
     cumulative_max = dat.cummax()*1.0
     drawdown = (dat - cumulative_max) / cumulative_max
-    max_drawdown = drawdown.min()
+    max_drawdown = drawdown.min()*100
     return max_drawdown
 
 def profit(dat):

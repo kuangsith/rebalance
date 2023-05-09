@@ -134,7 +134,9 @@ df = df.dropna()
 
 ## Displaying key performance indicator
 
-dfperf = pd.DataFrame([],columns= ['Investment','Profit','Sharpe ratio','Max Drawdown'])
+st.header("Summary")
+
+dfperf = pd.DataFrame([],columns= ['Investment','Profit (%)','Sharpe ratio','Max Drawdown (%)'])
 
 investment1 = ticker1
 profit1 = get_price_binanace.profit(df[f'Capital - {ticker1}'])
