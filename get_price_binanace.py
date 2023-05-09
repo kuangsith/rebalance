@@ -100,13 +100,13 @@ def profit(dat):
     p=100.0*(dat.iloc[-1]-dat.iloc[0])/dat.iloc[0]
     return p
 
-df = pd.DataFrame([[1,2,3],[2,3,4],[1,2,3],[2,1,3]],columns=['A','B','C'])
-df = df.append(pd.Series([4, 5, 6], index=df.columns), ignore_index=True)
+# df = pd.DataFrame([[1,2,3],[2,3,4],[1,2,3],[2,1,3]],columns=['A','B','C'])
+# df = df.append(pd.Series([4, 5, 6], index=df.columns), ignore_index=True)
 
-print(df)
-print(profit(df['A']))
-print(profit(df['B']))
-print(profit(df['C']))
+# print(df)
+# print(profit(df['A']))
+# print(profit(df['B']))
+# print(profit(df['C']))
 
 
 
