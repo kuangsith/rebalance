@@ -145,3 +145,4 @@ if update:
     st.session_state.ticker2 = ticker2_temp
     st.session_state.ratio = ratio_temp
     st.session_state.acceptablerange = acceptable_temp
+    st.experimental_rerun()
