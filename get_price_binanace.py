@@ -66,6 +66,7 @@ def getprice_days(ticker,timestamp):
             if len(klines) == 0:
                 return float("nan")
             else:
+                numcol = len(klines[0])
                 p = pd.DataFrame(klines,index=list(range(12)))
                 p = p[[0,1]]
                 p = p.rename(columns={0:'datetime',1:'price'})
