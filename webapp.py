@@ -2,6 +2,7 @@ import pandas as pd
 import datetime
 import get_price_binanace
 import streamlit as st
+import numpy
 
 if 'ticker1' not in st.session_state:
     st.session_state.ticker1 = 'BTC'
@@ -138,7 +139,35 @@ st.write(f"Rebalacing with {int(ratio*100)}% on {ticker1} and {int((1-ratio)*100
 st.line_chart(data=df[[f'Capital - {ticker1}',f'Capital - {ticker2}','Total Cap']])
 
 st.write('Full dataframe:')
+
 st.dataframe(df)
+
+## Displaying key performance indicator
+
+dfperf = pd.dataframe([],columns= ['Investment','Profit','Sharpe ratio','Max Drawdown'])
+dfperf = dfperf.set_index('Investment')
+
+investment1 = ticker1
+profit1 = get_price_binanace.profit(df[f'Capital - {ticker1}'])
+sharpe1 = get_price_binanace.sharpe(df[f'Capital - {ticker1}'])
+mdd1 = get_price_binanace.maxdrawdown(df[f'Capital - {ticker1}'])
+dat1 = [investment1,profit1,sharpe1,mdd1]
+
+investment2 = ticker2
+profit2 = get_price_binanace.profit(df[f'Capital - {ticker2}'])
+sharpe2 = get_price_binanace.sharpe(df[f'Capital - {ticker2}'])
+mdd2 = get_price_binanace.maxdrawdown(df[f'Capital - {ticker2}'])
+dat2 = [investment2,profit2,sharpe2,mdd2]
+
+investment3 = 'Rebalancing'
+profit3 = get_price_binanace.profit(df['Total Cap'])
+sharpe3 = get_price_binanace.sharpe(df['Total Cap'])
+mdd3 = get_price_binanace.maxdrawdown(df['Total Cap'])
+dat3 = [investment3,profit3,sharpe3,mdd3]
+
+dfperf = dfperf.append(pd.Series([dat1,dat2,dat3], index=df.columns))
+
+st.dataframe(dfperf)
 
 if update:
     st.session_state.ticker1 = ticker1_temp

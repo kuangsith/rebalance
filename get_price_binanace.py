@@ -3,6 +3,8 @@ import json
 import pandas as pd
 import datetime
 import time
+import numpy
+import math
 
 
 
@@ -81,6 +83,31 @@ def getprice_days(ticker,timestamp):
 
 def roundoutmicrosecond(mydate):
     return mydate.replace(microsecond=0)
+
+def sharpe(dat):
+    ret = 1.0*(dat - dat.shift(1))/dat.shift(1)
+    sharpe_ratio = numpy.mean(ret) / numpy.std(ret)*math.sqrt(365)
+    return sharpe_ratio
+
+
+def maxdrawdown(dat):
+    cumulative_max = dat.cummax()*1.0
+    drawdown = (dat - cumulative_max) / cumulative_max
+    max_drawdown = drawdown.min()
+    return max_drawdown
+
+def profit(dat):
+    p=100.0*(dat.iloc[-1]-dat.iloc[0])/dat.iloc[0]
+    return p
+
+df = pd.DataFrame([[1,2,3],[2,3,4],[1,2,3],[2,1,3]],columns=['A','B','C'])
+df = df.append(pd.Series([4, 5, 6], index=df.columns), ignore_index=True)
+
+print(df)
+print(profit(df['A']))
+print(profit(df['B']))
+print(profit(df['C']))
+
 
 
 # start = int(datetime.datetime(2021,12,31,12,0,0,tzinfo=datetime.timezone.utc).timestamp())*1000
