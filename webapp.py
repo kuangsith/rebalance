@@ -42,8 +42,8 @@ month = 1
 day = 1
 
 #defining all parameters
-ticker1 = 'BTC' #st.session_state.ticker1
-ticker2 = 'ETH' #st.session_state.ticker2
+ticker1 = st.session_state.ticker1
+ticker2 = st.session_state.ticker2
 ratio = st.session_state.ratio
 acceptablerange = st.session_state.acceptablerange
 
@@ -93,7 +93,7 @@ for i,row in df.iloc[1:].iterrows():
     yesterdaycap = df.loc[i-1,f'Capital - {ticker2}']
     yesterdayreturn = df.loc[i-1,f'return {ticker2}']
     df.loc[i,f'Capital - {ticker2}'] = yesterdaycap*(1+yesterdayreturn)
-    
+
 fee = 0.0
 
 df[f'portion {ticker1}'] = 0.0
@@ -101,8 +101,8 @@ df.loc[0,f'portion {ticker1}'] = ratio*initcap
 df[f'portion {ticker2}'] = 0.0
 df.loc[0,f'portion {ticker2}'] = (1-ratio)*initcap
 
-df['Total Cap - Rebalance'] = 0.0
-df.loc[0,'Total Cap - Rebalance'] = initcap
+df['Total Cap'] = 0.0
+df.loc[0,'Total Cap'] = initcap
 df['Rebalance?'] = False
 
 df['ratio'] = ratio
@@ -113,16 +113,18 @@ df[f'portion {ticker2} - reb'] = df[f'portion {ticker2}']
 for i,row in df.iloc[1:].iterrows():
     df.loc[i,f'portion {ticker1}'] = df.loc[i-1,f'portion {ticker1} - reb']*(1+df.loc[i-1,f'return {ticker1}'])
     df.loc[i,f'portion {ticker2}'] = df.loc[i-1,f'portion {ticker2} - reb']*(1+df.loc[i-1,f'return {ticker2}'])
-    df.loc[i,'Total Cap - Rebalance'] = df.loc[i,f'portion {ticker1}'] + df.loc[i,f'portion {ticker2}']
-    df.loc[i,'ratio'] = df.loc[i,f'portion {ticker1}']/df.loc[i,'Total Cap - Rebalance']
+    df.loc[i,'Total Cap'] = df.loc[i,f'portion {ticker1}'] + df.loc[i,f'portion {ticker2}']
+    df.loc[i,'ratio'] = df.loc[i,f'portion {ticker1}']/df.loc[i,'Total Cap']
 
-    if abs(df.loc[i,f'portion {ticker1}']/df.loc[i,'Total Cap - Rebalance']-ratio) >= acceptablerange:
+    if abs(df.loc[i,f'portion {ticker1}']/df.loc[i,'Total Cap']-ratio) >= acceptablerange:
         df.loc[i,'Rebalance?'] = True
-        df.loc[i,f'portion {ticker1} - reb'] = ratio*df.loc[i,'Total Cap - Rebalance']
-        df.loc[i,f'portion {ticker2} - reb'] = df.loc[i,'Total Cap - Rebalance'] - df.loc[i,f'portion {ticker1} - reb']
+        df.loc[i,f'portion {ticker1} - reb'] = ratio*df.loc[i,'Total Cap']
+        df.loc[i,f'portion {ticker2} - reb'] = df.loc[i,'Total Cap'] - df.loc[i,f'portion {ticker1} - reb']
     else:
         df.loc[i,f'portion {ticker1} - reb'] = df.loc[i,f'portion {ticker1}']
         df.loc[i,f'portion {ticker2} - reb'] = df.loc[i,f'portion {ticker2}']
 
-st.line_chart(data=df[[f'Capital - {ticker1}',f'Capital - {ticker2}','Total Cap - Rebalance']], x = df['datetime'])
+st.dataframe(df)
+
+st.line_chart(data=df[[f'Capital - {ticker1}',f'Capital - {ticker2}','Total Cap']], x = df['datetime'])
 
