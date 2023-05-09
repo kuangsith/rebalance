@@ -128,5 +128,5 @@ df = df.dropna()
 
 st.dataframe(df)
 
-st.line_chart(data=df[[f'Capital - {ticker1}',f'Capital - {ticker2}','Total Cap']], x = df['datetime'])
-
+#st.line_chart(data=df[[f'Capital - {ticker1}',f'Capital - {ticker2}','Total Cap']], x = df['datetime'])
+st.line_chart(data=df[[f'Capital - {ticker1}']], x = df['datetime'])
