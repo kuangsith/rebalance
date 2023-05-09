@@ -1,12 +1,11 @@
 import pandas as pd
-from matplotlib import pyplot as plt
 import datetime
 import get_price_binanace
 import streamlit as st
 
 st.header('Rebalancing')
 
-coinlist = ['BTC','']
+coinlist = ['BTC','ETH','SOL','BNB','']
 asset1 = st.selectbox()
 asset2 = st.selectbox()
 
