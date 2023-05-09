@@ -60,13 +60,13 @@ def getprice_days(ticker,timestamp):
             # wait and retry after a certain amount of time
             retry_after = int(response.headers.get('Retry-After'))
             time.sleep(retry_after)
-            return getprice(ticker,timestamp)
+            return getprice_days(ticker,timestamp)
         else:
             klines = json.loads(response.text)
             if len(klines) == 0:
                 return float("nan")
             else:
-                numcol = len(list(klines)[0])
+                numcol = 12 #len(list(klines)[0])
                 p = pd.DataFrame(klines,index=list(range(numcol)))
                 p = p[[0,1]]
                 p = p.rename(columns={0:'datetime',1:'price'})
