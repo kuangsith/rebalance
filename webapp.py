@@ -5,9 +5,9 @@ import streamlit as st
 
 st.header('Rebalancing')
 
-coinlist = ['BTC','ETH','SOL','BNB','']
-asset1 = st.selectbox()
-asset2 = st.selectbox()
+coinlist = ['BTC','ETH','SOL','BNB','ADA']
+asset1 = st.selectbox('Asset #1',coinlist)
+asset2 = st.selectbox('Asset #2',coinlist)
 
 ticker1 = 'ADA'
 ticker2 = 'SOL'
