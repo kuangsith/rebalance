@@ -23,7 +23,7 @@ def getprice(ticker,timestamp):
 
     # Define the URL for the API request
     
-    url = f'https://api.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&startTime={start_time}&endTime={end_time}&limit={limit}'
+    url = f'https://data.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&startTime={start_time}&endTime={end_time}&limit={limit}'
     try:
         response = requests.get(url)
         # check for rate-limiting response codes
@@ -52,7 +52,7 @@ def getprice_days(ticker,timestamp):
 
     # Define the URL for the API request
     
-    url = f'https://api.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&startTime={start_time}&endTime={end_time}&limit={limit}'
+    url = f'https://data.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&startTime={start_time}&endTime={end_time}&limit={limit}'
     try:
         response = requests.get(url)
         # check for rate-limiting response codes
