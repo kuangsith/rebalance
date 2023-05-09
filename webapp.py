@@ -42,8 +42,8 @@ month = 1
 day = 1
 
 #defining all parameters
-ticker1 = st.session_state.ticker1
-ticker2 = st.session_state.ticker2
+ticker1 = 'BTC' #st.session_state.ticker1
+ticker2 = 'ETH' #st.session_state.ticker2
 ratio = st.session_state.ratio
 acceptablerange = st.session_state.acceptablerange
 
