@@ -12,7 +12,7 @@ if 'ratio' not in st.session_state:
     st.session_state.ratio = 0.5
 if 'acceptablerange' not in st.session_state:
     st.session_state.acceptablerange = 0.05
-if 'datetime' not in st.datetime:
+if 'datetime' not in st.session_state:
     st.session_state.datetime = datetime.date(2020, 1, 1)
 
 st.header('Rebalancing')
