@@ -12,6 +12,8 @@ if 'ratio' not in st.session_state:
     st.session_state.ratio = 0.5
 if 'acceptablerange' not in st.session_state:
     st.session_state.acceptablerange = 0.05
+if 'datetime' not in st.datetime:
+    st.session_state.datetime = datetime.date(2020, 1, 1)
 
 st.header('Rebalancing')
 
@@ -37,19 +39,19 @@ with st.expander("Setting"):
         acceptable_temp = st.slider('Percentage off to rebalance:', min_value=0.00, max_value = 0.2,value=0.05)
 
     with kol3:
+        temp_date = st.date_input("Start date", datetime.date(2020, 1, 1))
         update = st.button('Update')
 
 
-
-year = 2022
-month = 1
-day = 1
 
 #defining all parameters
 ticker1 = st.session_state.ticker1
 ticker2 = st.session_state.ticker2
 ratio = st.session_state.ratio
 acceptablerange = st.session_state.acceptablerange
+year = st.session_state.datetime.year
+month = st.session_state.datetime.month
+day = st.session_state.datetime.day
 
 timestart = int(datetime.datetime(year,month,day,tzinfo=datetime.timezone.utc).timestamp())*1000
 
@@ -174,4 +176,5 @@ if update:
     st.session_state.ticker2 = ticker2_temp
     st.session_state.ratio = ratio_temp
     st.session_state.acceptablerange = acceptable_temp
+    st.session_state.datetime = temp_date
     st.experimental_rerun()
